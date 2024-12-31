@@ -248,7 +248,10 @@ load_NCRMP_benthic_cover_data <- function(project = "NULL", region){
         dplyr::mutate(MAPGRID_NR = as.factor(MAPGRID_NR)) %>%
         dplyr::mutate(MAPGRID_NR = paste("FGB", MAPGRID_NR, sep = ""))
 
-      dat <- dplyr::bind_rows(dat1, dat2, dat3, dat4) %>%
+      dat5 <- FGBNMS_2024_benthic_cover %>%
+        dplyr::mutate(MAPGRID_NR = as.factor(MAPGRID_NR))
+
+      dat <- dplyr::bind_rows(dat1, dat2, dat3, dat4, dat5) %>%
         dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS")
 
     }

@@ -49,7 +49,9 @@ NCRMP_make_ESA_corals_FOI <- function(){
 
 
 
-esa_spp <- dplyr::bind_rows(USVI_2023_inverts_ESAcorals,
+esa_spp <- dplyr::bind_rows(
+                        FGBNMS_2024_inverts_ESAcorals,
+                        USVI_2023_inverts_ESAcorals,
                         PRICO_2023_inverts_ESAcorals,
                         FLK_2022_inverts_ESAcorals,
                         Tortugas_2022_inverts_ESAcorals,
@@ -100,7 +102,8 @@ esa_spp <- dplyr::bind_rows(USVI_2023_inverts_ESAcorals,
 
 # get total # of sites surveyed for each species
 # calculate NAs by species (not counted)
-esa_Nsites <-  dplyr::bind_rows(USVI_2023_inverts_ESAcorals,
+esa_Nsites <-  dplyr::bind_rows(FGBNMS_2024_inverts_ESAcorals,
+                                USVI_2023_inverts_ESAcorals,
                                 PRICO_2023_inverts_ESAcorals,
                                 FLK_2022_inverts_ESAcorals,
                                 Tortugas_2022_inverts_ESAcorals,
@@ -162,7 +165,8 @@ FOI_species <- esa_spp %>%
   dplyr::mutate(foi = N/Nsites)
 
 
-esa_reg <- dplyr::bind_rows(USVI_2023_inverts_ESAcorals,
+esa_reg <- dplyr::bind_rows(FGBNMS_2024_inverts_ESAcorals,
+                            USVI_2023_inverts_ESAcorals,
                             PRICO_2023_inverts_ESAcorals,
                             FLK_2022_inverts_ESAcorals,
                             Tortugas_2022_inverts_ESAcorals,

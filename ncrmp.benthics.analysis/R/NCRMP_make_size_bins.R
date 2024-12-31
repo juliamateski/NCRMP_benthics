@@ -69,27 +69,6 @@ NCRMP_make_size_bins <- function(region, project, years,
                                  size_bin_count = 10, length_bin_count = 10,
                                  species_filter = NULL) {
 
-  analyzed_species <- c(
-    "ACR CERV", #A. cervicornis
-    "ACR PALM", #A. palmata
-    "ORB ANNU", #O. annularis
-    "ORB FRAN", #O. franksi
-    "ORB FAVE", #O. faveolata
-    "MEA MEAN", #M. meandrites
-    "DEN CYLI", #D. cylindrus
-    "PSE STRI", #A. cervicornis
-    "DIP LABY", #D. labyrinthiformis
-    "COL NATA", #C. natans
-    "SID SIDE", #S. siderea
-    "POR ASTR", #P. astreoides
-    "MON CAVE", #M. cavernosa
-    "AGA AGAR", #A. agaricites
-    "MAD AURE", #M. auretenra
-    "STE INTE" #S. inercepta
-  )
-
-
-
   #p - a constant for 3d surface area calculation
   p = 1.6
 

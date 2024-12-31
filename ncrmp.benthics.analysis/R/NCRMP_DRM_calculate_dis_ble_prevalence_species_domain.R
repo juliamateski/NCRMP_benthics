@@ -149,7 +149,7 @@ NCRMP_DRM_calculate_dis_ble_prevalence_species_domain <- function(project, regio
     if(region == "GOM"){
 
       # Load species/site level bleaching & disease data
-      dat <- NCRMP_FGBNMS_2013_22_dis_ble_prev_species %>%
+      dat <- NCRMP_FGBNMS_2013_24_dis_ble_prev_species %>%
         dplyr::mutate(SPECIES_CD=dplyr::recode(SPECIES_CD,
                                                "ORB ANCX"="ORB SPE."))
     }

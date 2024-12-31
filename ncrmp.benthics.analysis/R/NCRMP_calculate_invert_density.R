@@ -229,8 +229,15 @@ NCRMP_calculate_invert_density <- function(region, project = "NULL") {
                      REGION = "GOM",
                      MAPGRID_NR = as.factor(MAPGRID_NR))
 
+     tmp5 <- FGBNMS_2024_inverts_ESAcorals %>%
+       dplyr::mutate(SURVEY = "NCRMP",
+                     ANALYSIS_STRATUM = "FGBNMS",
+                     STRAT = "FGBNMS",
+                     REGION = "GOM",
+                     MAPGRID_NR = as.factor(MAPGRID_NR))
+
     #Combine data
-    dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4)
+    dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4, tmp5)
 
   }
 

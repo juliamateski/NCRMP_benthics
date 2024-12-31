@@ -71,7 +71,7 @@ NCRMP_calculate_ESA_corals_PresAbs <- function()
   # FLK
   ### UPDATE IN DEC. 2023!!
   # PROT is re-coded here to 0 for ALL sites as fish and benthics met 12/19/23
-  # to determine that it is not appropraite to keep PROT in the analysis strat
+  # to determine that it is not appropriate to keep PROT in the analysis strat
   # in FLK because the data aren't allocated that way
   # only affects FLK data
   tmp3 <- FLK_2014_2stage_inverts_ESAcorals %>%
@@ -184,8 +184,11 @@ NCRMP_calculate_ESA_corals_PresAbs <- function()
   tmp8.1 <- FGBNMS_2022_inverts_ESAcorals %>%
     dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS")
 
+  tmp8.2 <- FGBNMS_2024_inverts_ESAcorals %>%
+    dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS")
+
   #Combine Carib and GOM
-  tmp9 <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp3.1, tmp3.2, tmp4, tmp5, tmp5.1, tmp5.2, tmp8, tmp8.1) %>%
+  tmp9 <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp3.1, tmp3.2, tmp4, tmp5, tmp5.1, tmp5.2, tmp8, tmp8.1, tmp8.2) %>%
     # Remove METERS_COMPLETED as it is missing from the FL data
     dplyr::select(-METERS_COMPLETED) %>%
   # Combine and change to factor - there are letters in the FGBNMS MAPGRID NRs

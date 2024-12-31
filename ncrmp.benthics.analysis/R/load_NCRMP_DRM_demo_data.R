@@ -535,11 +535,14 @@ load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = 
       tmp4 <- FGBNMS_2022_coral_demographics %>%
         dplyr::mutate(MAPGRID_NR = as.factor(MAPGRID_NR))
 
+      tmp5 <- FGBNMS_2024_coral_demographics %>%
+        dplyr::mutate(MAPGRID_NR = as.factor(MAPGRID_NR))
+
       if(species_filter == "FALSE" ||
          species_filter == "NULL"){
 
         #Combine 1 stage or 2 stage data
-        dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4) %>%
+        dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4, tmp5) %>%
           dplyr::mutate(SURVEY = "NCRMP",
                         STRAT = "FGBNMS",
                         REGION = "GOM")
@@ -547,7 +550,7 @@ load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = 
 
       if(species_filter == "TRUE"){
         #Combine 1 stage or 2 stage data
-        dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4) %>%
+        dat_1stage <- dplyr::bind_rows(tmp1, tmp2, tmp3, tmp4, tmp5) %>%
           dplyr::mutate(SURVEY = "NCRMP",
                         STRAT = "FGBNMS",
                         REGION = "GOM") %>%

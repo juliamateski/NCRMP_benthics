@@ -115,7 +115,7 @@ NCRMP_colony_percent_cover <- function(region, ptitle, file_path, project = "NUL
 
   if(region=="GOM") {
     tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
-                                                        sppcvr = NCRMP_FGBNMS_2013_22_percent_cover_species,
+                                                        sppcvr = NCRMP_FGBNMS_2013_24_percent_cover_species,
                                                         project = project)
 
   }
@@ -131,7 +131,7 @@ NCRMP_colony_percent_cover <- function(region, ptitle, file_path, project = "NUL
     dplyr::ungroup() %>%
     # exclude occurrences of 0
     dplyr::filter(avCvr > 0,
-                  YEAR >= 2022) %>%
+                  YEAR >= 2024) %>%
 
     ggplot(.,
            aes(x = reorder(SPECIES_NAME, avCvr),

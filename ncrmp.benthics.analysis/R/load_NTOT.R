@@ -587,7 +587,7 @@ if(region == "Tortugas") {
 
 if(region == "GOM"){
 
-  ntot13 <- FGBNMS_2022_NTOT %>%
+  ntot13 <- FGBNMS_2024_NTOT %>%
     dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
                   PROT = NA_character_,
                   YEAR = 2013) %>%
@@ -597,7 +597,7 @@ if(region == "GOM"){
     dplyr::ungroup()
 
 
-  ntot15 <- FGBNMS_2022_NTOT %>%
+  ntot15 <- FGBNMS_2024_NTOT %>%
     dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
                   PROT = NA_character_,
                   YEAR = 2015) %>%
@@ -606,7 +606,7 @@ if(region == "GOM"){
                      ngrtot = sum(NTOT)) %>%
     dplyr::ungroup()
 
-  ntot18 <- FGBNMS_2022_NTOT %>%
+  ntot18 <- FGBNMS_2024_NTOT %>%
     dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
                   PROT = NA_character_,
                   YEAR = 2018) %>%
@@ -615,7 +615,16 @@ if(region == "GOM"){
                      ngrtot = sum(NTOT)) %>%
     dplyr::ungroup()
 
-  ntot22 <- FGBNMS_2022_NTOT %>%
+  ntot22 <- FGBNMS_2024_NTOT %>%
+    dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
+                  PROT = NA_character_,
+                  YEAR = 2022) %>%
+    dplyr::group_by(REGION, YEAR, ANALYSIS_STRATUM, DEPTH_STRAT, PROT) %>%
+    dplyr::summarise(NTOT = sum(NTOT),
+                     ngrtot = sum(NTOT)) %>%
+    dplyr::ungroup()
+
+  ntot24 <- FGBNMS_2024_NTOT %>%
     dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
                   PROT = NA_character_) %>%
     dplyr::group_by(REGION, YEAR, ANALYSIS_STRATUM, DEPTH_STRAT, PROT) %>%
@@ -623,7 +632,8 @@ if(region == "GOM"){
                      ngrtot = sum(NTOT)) %>%
     dplyr::ungroup()
 
-  ntot <- dplyr::bind_rows(ntot13, ntot15, ntot18, ntot22)
+  ntot <- dplyr::bind_rows(ntot13, ntot15, ntot18, ntot22, ntot24) %>%
+    mutate(STRAT = "FGBNMS") ##Although there are STRATS (east/west, high/low relief) we do not analyze by them because there are too few samples and they're not allocated that way. Instead, it is all under FGBNMS. A strat column is still needed though for consitency among other NTOTs and scrips
 
 }
 
@@ -638,3 +648,4 @@ ntot <- ntot %>%
 
 return(ntot)
 }
+
