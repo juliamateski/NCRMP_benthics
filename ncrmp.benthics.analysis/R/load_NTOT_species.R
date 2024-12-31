@@ -589,10 +589,11 @@ load_NTOT_species <- function(region, inputdata, project){
     # add an empty data frame to populate with the filtered NTOTs
     ntot <- data.frame()
     # create a data frame of the full NTOTs for FLK
-    NTOT_all <- dplyr::bind_rows(FGBNMS_2022_NTOT %>% dplyr::mutate(YEAR = 2013),
-                                 FGBNMS_2022_NTOT %>% dplyr::mutate(YEAR = 2015),
-                                 FGBNMS_2022_NTOT %>% dplyr::mutate(YEAR = 2018),
-                                 FGBNMS_2022_NTOT) %>%
+    NTOT_all <- dplyr::bind_rows(FGBNMS_2024_NTOT %>% dplyr::mutate(YEAR = 2013),
+                                 FGBNMS_2024_NTOT %>% dplyr::mutate(YEAR = 2015),
+                                 FGBNMS_2024_NTOT %>% dplyr::mutate(YEAR = 2018),
+                                 FGBNMS_2024_NTOT %>% dplyr::mutate(YEAR = 2022),
+                                 FGBNMS_2024_NTOT) %>%
       dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
                     PROT = NA_character_) %>%
       dplyr::group_by(REGION, YEAR, ANALYSIS_STRATUM, DEPTH_STRAT, PROT) %>%

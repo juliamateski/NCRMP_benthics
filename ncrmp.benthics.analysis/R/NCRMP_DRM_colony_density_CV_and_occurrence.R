@@ -119,7 +119,7 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
                                                         project = project)
   } else if (region == "GOM") {
     region_means <- NCRMP_make_weighted_density_CV_data(region = region,
-                                                        sppdens = NCRMP_FGBNMS_2013_22_density_species,
+                                                        sppdens = NCRMP_FGBNMS_2013_24_density_species,
                                                         project = project)
   }
 
