@@ -53,7 +53,7 @@
 #'
 
 
-NCRMP_DRM_calculate_mean_colony_size <- function(project = "NULL", region, species_filter = "NULL"){
+NCRMP_DRM_calculate_mean_colony_size_DEPRECIATED <- function(project = "NULL", region, species_filter = "NULL"){
 
   tmp <- load_NCRMP_DRM_demo_data(project = project,
                                   region = region,
