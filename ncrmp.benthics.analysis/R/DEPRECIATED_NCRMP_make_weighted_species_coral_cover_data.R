@@ -52,7 +52,7 @@
 
 
 # function to Calculate weights based on the most recent sampling grid
-NCRMP_make_weighted_species_coral_cover_data <- function(region, sppcvr, project = "NULL") {
+NCRMP_make_weighted_species_coral_cover_data_DEPRECIATED <- function(region, sppcvr, project = "NULL") {
 
 
   ntot <- load_NTOT(region = region,
