@@ -40,7 +40,7 @@
 #'
 
 
-load_NCRMP_benthic_cover_data <- function(project = "NULL", region){
+load_NCRMP_benthic_cover_data_DEPRECIATED <- function(project = "NULL", region){
 
 
   if(project == "MIR"){
