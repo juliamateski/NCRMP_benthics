@@ -45,7 +45,7 @@
 #'
 
 
-NCRMP_colony_percent_cover <- function(region, ptitle, file_path, project = "NULL"){
+NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, project = "NULL"){
 
   #############
   # coral species used in allocation
