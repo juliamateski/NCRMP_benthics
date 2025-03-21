@@ -44,7 +44,7 @@
 
 
 # function to Calculate weights based on the most recent sampling grid
-NCRMP_make_ESA_corals_FOI <- function(){
+NCRMP_make_ESA_corals_FOI_depreciated <- function(){
 
 
 
