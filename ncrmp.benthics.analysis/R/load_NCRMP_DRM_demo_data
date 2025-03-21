@@ -387,7 +387,7 @@ load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = 
   } #end PRICO
 
   ####Data Processing FGB####
-  if(region == "FGB"){
+  if(region == "GOM"){
 
     datasets <- list(
       FGBNMS_2013_coral_demographics,
