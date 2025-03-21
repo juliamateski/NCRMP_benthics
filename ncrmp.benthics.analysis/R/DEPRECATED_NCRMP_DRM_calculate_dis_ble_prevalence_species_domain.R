@@ -44,7 +44,7 @@
 #' @export
 #'
 #'
-NCRMP_DRM_calculate_dis_ble_prevalence_species_domain <- function(project, region){
+NCRMP_DRM_calculate_dis_ble_prevalence_species_domain_DEPRECATED <- function(project, region){
 
 
   if(project == "MIR"){
