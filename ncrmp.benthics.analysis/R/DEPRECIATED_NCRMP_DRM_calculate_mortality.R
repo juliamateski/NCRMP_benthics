@@ -54,7 +54,7 @@
 #'
 #'
 
-NCRMP_DRM_calculate_mortality <- function(project, region, species_filter = "NULL"){
+NCRMP_DRM_calculate_mortality_DEPRECIATED <- function(project, region, species_filter = "NULL"){
 
   tmp <- load_NCRMP_DRM_demo_data(project = project,
                                   region = region,
