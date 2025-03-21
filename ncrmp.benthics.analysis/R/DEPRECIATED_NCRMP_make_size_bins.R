@@ -65,7 +65,7 @@
 
 #Inputs: Region, Project (only NCRMP at this time), the years selected,
 ## and inputs for the 3D surface area bin count and Length bin count
-NCRMP_make_size_bins <- function(region, project, years,
+NCRMP_make_size_bins_DEPRECIATED <- function(region, project, years,
                                  size_bin_count = 10, length_bin_count = 10,
                                  species_filter = NULL) {
 
