@@ -51,7 +51,7 @@
 #'
 #'
 
-NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL")
+NCRMP_make_weighted_LPI_data_DEPRECIATED <- function(inputdata, region, project = "NULL")
 {
 
   # Define regional groups
