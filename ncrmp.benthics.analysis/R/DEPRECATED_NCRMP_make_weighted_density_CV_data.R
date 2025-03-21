@@ -53,7 +53,7 @@
 
 
 # function to Calculate weights based on the most recent sampling grid
-NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL") {
+NCRMP_make_weighted_density_CV_data_DEPRECATED <- function(region, sppdens, project = "NULL") {
 
   ntot <- load_NTOT(region = region,
                     inputdata = sppdens,
