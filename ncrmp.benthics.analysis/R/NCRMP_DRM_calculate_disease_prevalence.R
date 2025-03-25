@@ -70,13 +70,13 @@ NCRMP_DRM_calculate_disease_prevalence <- function(project, region, species_filt
   PR_filter <- c("COL NATA", "ORB ANNU", "DIP LABY", "POR PORI", "ORB FAVE", "ACR CERV", "ACR PALM",
                  "ORB FRAN", "MON CAVE", "PSE STRI", "SID SIDE", "AGA AGAR", "AGA LAMA", "DEN CYLI")
 
-  GOM_filter <- c("ORB FRAN", "PSE STRI", "AGA AGAR", "MON CAVE", "STE INTE", "COL NATA", "MAD DECA",
+  FGB_filter <- c("ORB FRAN", "PSE STRI", "AGA AGAR", "MON CAVE", "STE INTE", "COL NATA", "MAD DECA",
                   "ORB FAVE", "MAD AURE", "DIP LABY", "ORB ANNU", "POR ASTR", "PSE CLIV", "SID SIDE")
 
 
   # Define regional groups
   FL <- c("SEFCRI", "FLK", "Tortugas")
-  GOM <- "GOM"
+  FGB <- "FGB"
   Carib <- c("STTSTJ", "STX", "PRICO")
 
   # Load data
@@ -338,7 +338,7 @@ NCRMP_DRM_calculate_disease_prevalence <- function(project, region, species_filt
       }
     }
 
-    # Carib / GOM
+    # Carib / FGB
 
     if(region == "STTSTJ"){
 
@@ -434,7 +434,7 @@ NCRMP_DRM_calculate_disease_prevalence <- function(project, region, species_filt
 
     }
 
-    if(region == "GOM"){
+    if(region == "FGB"){
 
       tmp1 <- FGBNMS_2013_coral_demographics
 
@@ -449,7 +449,7 @@ NCRMP_DRM_calculate_disease_prevalence <- function(project, region, species_filt
         dat_1stage <- rbind(tmp1, tmp2, tmp3) %>%
           dplyr::mutate(SURVEY = "NCRMP",
                         STRAT = "FGBNMS",
-                        REGION = "GOM",
+                        REGION = "FGB",
                         DATE = paste(MONTH, DAY, YEAR, sep = "/" ))
       }
 
@@ -458,9 +458,9 @@ NCRMP_DRM_calculate_disease_prevalence <- function(project, region, species_filt
         dat_1stage <- rbind(tmp1, tmp2, tmp3) %>%
           dplyr::mutate(SURVEY = "NCRMP",
                         STRAT = "FGBNMS",
-                        REGION = "GOM",
+                        REGION = "FGB",
                         DATE = paste(MONTH, DAY, YEAR, sep = "/" )) %>%
-          dplyr::filter(SPECIES_CD %in% GOM_filter)
+          dplyr::filter(SPECIES_CD %in% FGB_filter)
       }
 
     }

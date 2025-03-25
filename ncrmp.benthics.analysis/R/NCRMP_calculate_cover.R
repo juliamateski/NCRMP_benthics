@@ -42,7 +42,7 @@
 #'
 #'
 #'
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param project A string indicating the project: "NCRMP" or "MIR".
 #' @return A list of dataframes, including site level cover by species, site level cover by group, strata mean cover by group, and weighted regional mean cover by group.
 #' @importFrom magrittr "%>%"
@@ -126,7 +126,7 @@ NCRMP_calculate_cover <- function(region, project = "NULL"){
   }
 
 
-  if((project == "MIR" && region == "FLK") || (project == "NCRMP" && region %in% c("STTSTJ", "STX", "PRICO", "GOM"))) {
+  if((project == "MIR" && region == "FLK") || (project == "NCRMP" && region %in% c("STTSTJ", "STX", "PRICO", "FGB"))) {
 
     dat2 <- cover_data %>%
       calc_perc_cover()%>%

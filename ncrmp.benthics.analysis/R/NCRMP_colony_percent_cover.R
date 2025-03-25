@@ -34,7 +34,7 @@
 #' selected region.
 #'
 #'
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param ptitle A string indicating the plot title.
 #' @param project A string indicating the project: "NCRMP" or "MIR".
 #' @param file_path A string indicating the filepath for the figure output by this function.
@@ -60,7 +60,7 @@ NCRMP_colony_percent_cover <- function(region, ptitle, file_path, project = "NUL
               "PRICO" = NCRMP_PRICO_2014_23_percent_cover_species,
               "STTSTJ" = NCRMP_STTSTJ_2013_23_percent_cover_species,
               "STX" = NCRMP_STX_2015_23_percent_cover_species,
-              "GOM" = NCRMP_FGBNMS_2013_22_percent_cover_species,
+              "FGB" = NCRMP_FGBNMS_2013_22_percent_cover_species,
               stop("Unknown region"))
 
 

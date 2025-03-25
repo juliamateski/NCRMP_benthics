@@ -40,7 +40,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP ("NCRMP") or NCRMP and DRM combined ("NCRMO_DRM").
-#' @param region A string indicating the region. Options include: "FLK", "SEFCRI", "Tortugas", "STX", "STTSTJ", and "GOM".
+#' @param region A string indicating the region. Options include: "FLK", "SEFCRI", "Tortugas", "STX", "STTSTJ", and "FGB".
 #' @param species_filter An optional string indicating whether to filter to a subset of species.
 #' @return A list of dataframes including 1) mean old mortality at each site, 2)
 #' mean recent mortality at each site, 3) mean old mortality in each strata, 4)

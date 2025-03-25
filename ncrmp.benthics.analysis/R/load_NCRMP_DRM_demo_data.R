@@ -387,7 +387,7 @@ load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = 
   } #end PRICO
 
   ####Data Processing FGB####
-  if(region == "GOM"){
+  if(region == "FGB"){
 
     datasets <- list(
       FGBNMS_2013_coral_demographics,
@@ -402,7 +402,7 @@ load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = 
       dplyr::mutate(SURVEY = "NCRMP", STRAT = "FGBNMS", REGION = "FGB")
 
     if (species_filter == "TRUE"){
-      dat_1stage <- dat_1stage %>% dplyr::filter(SPECIES_CD %in% GOM_filter)
+      dat_1stage <- dat_1stage %>% dplyr::filter(SPECIES_CD %in% FGB_filter)
     }
   } #end FGB
 

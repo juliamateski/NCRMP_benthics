@@ -36,10 +36,11 @@
 #'
 #' @param project A string indicating the project, "NCRMP" or NCRMP and DRM combined ("NCRMP_DRM").
 #' @param inputdata A dataframe of coral demographic data. Can be in various forms.
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @return A dataframe of weighting scheme for corresponding region.
 #' @importFrom magrittr "%>%"
 #' @export
+#'
 #'
 #'
 
@@ -459,10 +460,10 @@ load_NTOT <- function(region, inputdata, project){
     ntot <- dplyr::bind_rows(ntot14, ntot16, ntot19, ntot21, ntot23)
   }
 
-  #### GOM ####
-  if(region == "GOM"){
+  #### FGB ####
+  if(region == "FGB"){
 
-    GOM_data_clean <- function(data, year){
+    FGB_data_clean <- function(data, year){
 
       data <- data %>%
         dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS",
@@ -474,7 +475,7 @@ load_NTOT <- function(region, inputdata, project){
         dplyr::ungroup()
     }
     years <- c(2013, 2015, 2018, 2022)
-    ntot <- bind_rows(lapply(years, function(y) GOM_data_clean(FGBNMS_2022_NTOT, y)))
+    ntot <- bind_rows(lapply(years, function(y) FGB_data_clean(FGBNMS_2022_NTOT, y)))
   }
 
   ntot <- ntot %>%

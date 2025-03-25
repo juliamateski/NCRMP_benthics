@@ -44,7 +44,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP ("NCRMP") or NCRMP and DRM combined ("NCRMP_DRM").
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STTSTJ", "STX, "GOM" or "PRICO".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STTSTJ", "STX, "FGB" or "PRICO".
 #' @return A list dataframes
 #' @importFrom magrittr "%>%"
 #' @importFrom vegan "diversity"
@@ -57,7 +57,7 @@ NCRMP_DRM_calculate_species_richness_diversity <- function(project, region){
   
   # Define regional groups
   FL <- c("SEFCRI", "FLK", "Tortugas")
-  GOM <- "GOM"
+  FGB <- "FGB"
   Carib <- c("STTSTJ", "STX", "PRICO")
   
   # Load demo data
@@ -109,7 +109,7 @@ NCRMP_DRM_calculate_species_richness_diversity <- function(project, region){
                           "STTSTJ" = dat_1stage,
                           "STX"= dat_1stage,
                           "PRICO" = dat_1stage,
-                          "GOM" = dat_1stage,
+                          "FGB" = dat_1stage,
                           NULL
   )
   

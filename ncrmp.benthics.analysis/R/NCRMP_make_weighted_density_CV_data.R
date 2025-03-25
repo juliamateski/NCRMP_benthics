@@ -40,7 +40,7 @@
 #'
 #'
 #'
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param sppdens A dataframe of coral density by species at each individual site in given region.
 #' @param project A string indicating the project, "NCRMP", "NCRMP_DRM", or "MIR".
 #' @return A dataframe of regional weighted means of coral density and CV.
@@ -52,9 +52,13 @@
 #'
 
 
+region = "FGB"
+project = "NCRMP"
+sppdens = NCRMP_FGBNMS_2013_24_density_species
 # function to Calculate weights based on the most recent sampling grid
 NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL") {
 
+  ####Load NTOT####
   ntot <- load_NTOT(region = region, inputdata = sppdens, project = project)
 
   ################UPDATE ALLOCATION SPECIES################################
@@ -66,13 +70,15 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
     FLK = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Siderastrea siderea", "Solenastrea bournoni"),
     Tortugas = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Orbicella franksi", "Stephanocoenia intersepta"),
     SEFCRI = c("Acropora cervicornis", "Dichocoenia stokesii", "Montastraea cavernosa", "Porites astreoides", "Pseudodiploria strigosa", "Siderastrea siderea")
+    FGB =  c("Montastraea cavernosa", "Orbicella faveolata", "Orbicella franksi", "Siderastrea siderea", "Stephanocoenia intersepta", "Porites porites", "Agaricia agaricites", "Colpophyllia natans", "Mussa angulosa", "Agaricia fragilis", "Madracis auretenra", "Pseudodiploria strigosa",
+                          "Orbicella annularis", "Agaricia humilis", "Scolymia cubensis", "Agaricia lamarcki", "Tubastraea coccinea", "Madracis decactis", "Porites astreoides"))
   )
 
   # Get the list of allocation species for the given region
   coral_species <- allocation_species_list[[region]]
 
 
-  ## coral data processing
+  ####coral data processing####
   species_dens_wide <- sppdens %>%
     # filter out spp columns
     dplyr::filter(
@@ -89,19 +95,20 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
     tidyr::spread(., SPECIES_NAME, DENSITY,fill = 0)
 
 
+  ####Make species density long format####
     if (project == "NCRMP_DRM" || (project == "NCRMP" && region %in% c("SEFCRI", "Tortugas"))) {
       species_dens_long <-  tidyr::gather(species_dens_wide, SPECIES_CD, dens, 12:ncol(species_dens_wide))
     }
-
+  
     else  {
       species_dens_long <- tidyr::gather(species_dens_wide, SPECIES_CD, dens, 14:ncol(species_dens_wide))
   }
 
-
+  ####strata means####
   strata_means <- species_dens_long %>%
     dplyr::mutate(
       ANALYSIS_STRATUM = if_else(
-        REGION %in% c("STX", "STTSTJ", "PRICO", "GOM"),
+        REGION %in% c("STX", "STTSTJ", "PRICO", "FGB"),
         STRAT,
         paste(STRAT, "/ PROT =", PROT, sep = " "),
       )) %>%
@@ -112,8 +119,7 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
                      N_DEMO_CELLS_SAMPLED = length(PRIMARY_SAMPLE_UNIT),
                      .groups = "keep") %>%
     # replace zeros with very small number
-    dplyr::mutate(svar=dplyr::case_when(svar==0 ~ 0.00000001,
-                                        TRUE ~ svar)) %>%
+    dplyr::mutate(svar=dplyr::case_when(svar==0 ~ 0.00000001, TRUE ~ svar)) %>%
     #variance of mean density in stratum
     dplyr::mutate(Var = svar/N_DEMO_CELLS_SAMPLED,
                   # std dev of density in stratum
@@ -123,7 +129,8 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
                   CV_perc = (SE/mean)*100,
                   CV = (SE/mean))
 
-  # region/population means
+  
+  ####Region/population means####
   region_means <- strata_means %>%
     dplyr::left_join(ntot) %>%
     dplyr::mutate(wh_mean = wh*mean,
@@ -143,7 +150,7 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
     dplyr::select(REGION, YEAR, ANALYSIS_STRATUM, SPECIES_CD, avDen, Var, SE, CV_perc, CV, n_sites, HABITAT_CD, DEPTH_STRAT)
 
 
-  # Calculate n sites present for each species
+  ####Calculate n sites present for each species####
   region_sites <- species_dens_long %>%
     # remove sites where species not present
     dplyr::group_by(REGION, YEAR) %>%
@@ -151,6 +158,7 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
                      .groups = "keep") %>%
     dplyr::ungroup()
 
+  ####Region Presence####
   region_presence <- species_dens_long %>%
     dplyr::filter(dens > 0) %>%
     dplyr::group_by(REGION, YEAR, SPECIES_CD) %>%
@@ -158,6 +166,7 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
                      .groups = "keep") %>%
     dplyr::ungroup()
 
+  ####Region Means####
   region_means <- dplyr::left_join(region_means, region_presence) %>%
     dplyr::mutate(occurrence = n_sites_present/n_sites) %>%
     dplyr::select(REGION, YEAR, ANALYSIS_STRATUM, SPECIES_CD, avDen, Var, SE, CV_perc, CV, occurrence, n_sites_present, n_sites, HABITAT_CD, DEPTH_STRAT) %>%
@@ -172,6 +181,7 @@ NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL
   region_means <- region_means %>%
     dplyr::mutate(allocation_species = ifelse(SPECIES_CD %in% coral_species, "Y", "N"))
 
-
+####Export####
   return(region_means)
 }
+

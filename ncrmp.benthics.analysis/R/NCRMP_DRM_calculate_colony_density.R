@@ -39,7 +39,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP or NCRMP and DRM combined ("NCRMP_DRM").
-#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param species_filter A string indicating whether to filter to a subset of species.
 #' @return A list of dataframes includeind 1) coral density by species at each site,
 #' 2) total coral density at each site, 3) mean total coral density for each strata,

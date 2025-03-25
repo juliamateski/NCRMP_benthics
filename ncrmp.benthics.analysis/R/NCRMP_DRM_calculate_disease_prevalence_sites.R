@@ -36,7 +36,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP or NCRMP and DRM combined ("NCRMP_DRM").
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param species_filter An optional concatenated string indicating whether to filter to a subset of species
 #' @return A list dataframes including 1) presence/absence of disease and bleaching
 #' at each site, 2) number of sites with disease and bleaching in each strata, and

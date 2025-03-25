@@ -17,7 +17,7 @@
 
 # Weighting scheme:
 # STRAT + PROT
-# STRAT (Carib/GOM)
+# STRAT (Carib/FGB)
 
 
 # Calls:
@@ -53,7 +53,7 @@
 #'
 #' @param project A string indicating the project, "NCRMP" or NCRMP and DRM combined ("NCRMP_DRM").
 #' @param inputdata A dataframe A dataframe of coral demographic data. Can be in various forms.
-#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param datatype A string indicating the datatype. String is based on the inputdata supplied.
 #' @return A list of dataframes. Output varies by datatype.
 #' @importFrom magrittr "%>%"
@@ -65,7 +65,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
 
   # Define regional groups
   FL <- c("SEFCRI", "FLK", "Tortugas")
-  GOM <- "GOM"
+  FGB <- "FGB"
   Carib <- c("STTSTJ", "STX", "PRICO")
 
   if(datatype == "mortality_species" | datatype == "size_species"){
@@ -111,7 +111,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         summarize_richness()
     }
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       richness_est <- inputdata %>%
         # group by analysis level strata
@@ -186,7 +186,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         calc_density()
     }
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       # Calculate avdns, svar, n and std
       density_est <- inputdata %>%
@@ -294,7 +294,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         calc_mortality()
     }
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       # Calculate avdns, svar, n and std
       mortality_est <- inputdata %>%
@@ -368,7 +368,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         calc_mort_by_species()
     }
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       mortality_est <- inputdata %>%
         # group by analysis level strata
@@ -468,7 +468,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
     }
 
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       # Calculate avdiv, svar, n and std
       diversity_est <- inputdata %>%
@@ -554,7 +554,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
     }
 
 
-    if(region %in% GOM |
+    if(region %in% FGB |
        region %in% Carib) {
 
       # Calculate avprev, svar, n and std
@@ -679,7 +679,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
       }
     print("u")
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       size_est <- inputdata %>%
         # group by analysis level strata
@@ -829,7 +829,7 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
           calc_size_species()
       }
 
-    if(region %in% GOM | region %in% Carib) {
+    if(region %in% FGB | region %in% Carib) {
 
       # Calculate av, svar, n and std
       size_est <- inputdata %>%

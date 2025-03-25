@@ -31,7 +31,7 @@
 #'
 #'
 #' @param project A string indicating the project: "NCRMP" or "MIR". Default is NCRMP.
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @return A dataframe of combined benthic cover data from specified region across all sampled years.
 #' @importFrom magrittr "%>%"
 #' @export
@@ -45,7 +45,7 @@ load_NCRMP_benthic_cover_data <- function(project = "NULL", region) {
     stop("Invalid project value")
   }
 
-  if (!region %in% c("SEFCRI", "FLK", "Tortugas", "STTSTJ", "STX", "PRICO", "GOM")) {
+  if (!region %in% c("SEFCRI", "FLK", "Tortugas", "STTSTJ", "STX", "PRICO", "FGB")) {
     stop("Invalid region value")
   }
 
@@ -214,7 +214,7 @@ load_NCRMP_benthic_cover_data <- function(project = "NULL", region) {
   } # end PRICO
 
   #### Data Processing Flower Gardens ####
-  if (region == "GOM") {
+  if (region == "FGB") {
 
     datasets <- list(
       FGBNMS_2013_benthic_cover,
@@ -227,7 +227,7 @@ load_NCRMP_benthic_cover_data <- function(project = "NULL", region) {
 
     dat <- dplyr::bind_rows(datasets) %>%
       dplyr::mutate(ANALYSIS_STRATUM = "FGBNMS")
-  } # end GOM
+  } # end FGB
 
   #### Export ####
   return(dat)

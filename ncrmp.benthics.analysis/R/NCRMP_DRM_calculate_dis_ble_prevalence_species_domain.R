@@ -37,7 +37,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP, MIR, or NCRMP and DRM combined ("NCRMP_DRM").
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @return A list dataframes, 1) bleaching prevalence domain estimates and
 #' 2) disease prevalence domain estimates, for all years of a given region.
 #' @importFrom magrittr "%>%"
@@ -81,7 +81,7 @@ NCRMP_DRM_calculate_dis_ble_prevalence_species_domain <- function(project, regio
                 "PRICO" = NCRMP_PRICO_2014_23_dis_ble_prev_species,
                 "STTSTJ" = NCRMP_STTSTJ_2013_23_dis_ble_prev_species,
                 "STX" = NCRMP_STX_2015_23_dis_ble_prev_species,
-                "GOM" = NCRMP_FGBNMS_2013_22_dis_ble_prev_species,
+                "FGB" = NCRMP_FGBNMS_2013_22_dis_ble_prev_species,
                 stop("Unknown region")
   )
 

@@ -42,7 +42,7 @@
 #'
 #'
 #' @param inputdata A dataframe of benthic cover data summarized by cover group at each site in a single region.
-#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region. Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param project A string indicating the project. "NCRMP" is the only option.
 #' @return A list of dataframes, including a dataframe of strata means of cover groups
 #' and a dataframe of weighted regional estimates of cover groups, for specified region.
@@ -51,14 +51,14 @@
 #'
 NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
 
-  # Define regional groups
+  ####Prep Data####
   FL <- c("SEFCRI", "FLK", "Tortugas")
-  GOM <- "GOM"
+  FGB <- "FGB"
   Carib <- c("STTSTJ", "STX", "PRICO")
 
   ntot <- load_NTOT(region = region, inputdata = inputdata, project = project)
 
-  # Helper function for calculating cover estimates
+  ####Calculating cover estimates####
   calculate_cover_estimates <- function(data, group_vars, extra_mutate = list()) {
     data %>%
       dplyr::group_by(!!!syms(group_vars)) %>%
@@ -85,7 +85,8 @@ NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
   } else {
     c("YEAR", "ANALYSIS_STRATUM", "STRAT", "cover_group")
   }
-
+  
+  ####Cover Estimate####
   cover_est <- calculate_cover_estimates(inputdata, group_vars, list(PROT = ifelse(region %in% FL, NA, NULL)))
 
   cover_est <- cover_est %>%
@@ -97,11 +98,12 @@ NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
     ) %>%
     dplyr::filter(!is.na(cover_group))
 
-  # Reformat output
+  ####Reformat output####
   cover_strata <- cover_est %>%
     dplyr::select(REGION, YEAR, ANALYSIS_STRATUM, STRAT, PROT, DEPTH_M, cover_group, n, avcvr, Var, SE, CV_perc) %>%
     dplyr::mutate(n = tidyr::replace_na(n, 0), CV_perc = ifelse(CV_perc == Inf, NA_real_, CV_perc))
 
+  ####Calculate Domain Est####
   Domain_est <- cover_est %>%
     dplyr::mutate(CV_perc = ifelse(CV_perc == Inf, NA_real_, CV_perc)) %>%
     dplyr::group_by(REGION, YEAR, cover_group) %>%
@@ -116,5 +118,6 @@ NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
     ) %>%
     dplyr::ungroup()
 
+  ####Export####
   list("cover_strata" = cover_strata, "Domain_est" = Domain_est)
 }

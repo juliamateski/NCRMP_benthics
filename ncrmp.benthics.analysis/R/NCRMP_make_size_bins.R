@@ -49,7 +49,7 @@
 #'
 #'
 #' @param project A string indicating the project, NCRMP or NCRMP and DRM combined ("NCRMP_DRM").
-#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "GOM".
+#' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
 #' @param years A concatenation of numerics indicating the two years to compare. Must be NCRMP sampling years if project = "NCRMP".
 #' @param size_bin_count A number indicating the desired number of bins for 3d surface area.
 #' As function is currently set up, this is not used.
@@ -81,7 +81,7 @@ NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, l
   demos <- load_NCRMP_DRM_demo_data(project = project, region = region)
 
 
-  if(project == "NCRMP" && region %in% c("FLK", "PRICO", "STTSTJ", "STX", "GOM")){
+  if(project == "NCRMP" && region %in% c("FLK", "PRICO", "STTSTJ", "STX", "FGB")){
     #These regions only have dat_1stage needed
     demos <- demos$dat_1stage %>%
       dplyr::filter(YEAR %in% years)
@@ -315,7 +315,7 @@ NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, l
       dplyr::ungroup()
   }
 
-  if (region %in% c("PRICO", "STTSTJ", "STX", "GOM")) {
+  if (region %in% c("PRICO", "STTSTJ", "STX", "FGB")) {
 
 
 
@@ -396,7 +396,7 @@ NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, l
     #inputdata is dummy, unused if project != DRM
     ntot <- load_NTOT(region = region, inputdata = demos,
                       project = project)
-    if (region == "GOM" & 2024 %in% years){
+    if (region == "FGB" & 2024 %in% years){
       ntot <- ntot%>%
         dplyr::mutate(ANALYSIS_STRATUM = ANALYSIS_STRATUM) %>%
         dplyr::mutate(YEAR = as.factor(YEAR)) %>%
