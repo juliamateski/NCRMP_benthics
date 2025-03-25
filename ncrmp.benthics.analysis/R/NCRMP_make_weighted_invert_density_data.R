@@ -101,8 +101,7 @@ NCRMP_make_weighted_invert_density_data <- function(inputdata, region, project =
     dens_est <- inputdata %>%
       dplyr::mutate(ANALYSIS_STRATUM = paste(STRAT, "/ PROT =", PROT, sep = " ")) %>%
       dplyr::group_by(YEAR, ANALYSIS_STRATUM, STRAT, PROT) %>% # group by analysis level strata
-      #JULIA whats helper?
-      helper() %>%
+      density_calculator() %>%
       dplyr::full_join(., ntot) %>% # Merge ntot with coral_est_spp
       # stratum estimates
       stratum_estimates
@@ -116,7 +115,7 @@ NCRMP_make_weighted_invert_density_data <- function(inputdata, region, project =
       dplyr::mutate(ANALYSIS_STRATUM = STRAT) %>%
       # group by analysis level strata
       dplyr::group_by(YEAR, ANALYSIS_STRATUM, STRAT) %>% # Modify this line to change analysis stratum
-      helper() %>%
+      density_calculator() %>%
       # Merge ntot with coral_est_spp
       dplyr::full_join(., ntot) %>%
       # stratum estimates
