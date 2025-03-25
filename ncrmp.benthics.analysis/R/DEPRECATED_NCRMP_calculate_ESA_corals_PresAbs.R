@@ -47,7 +47,7 @@
 
 
 # Specify AR dataset for Inverts/ESA corals as function inputs
-NCRMP_calculate_ESA_corals_PresAbs <- function()
+NCRMP_calculate_ESA_corals_PresAbs_DEPRECATED <- function()
 {
 
   # Load analysis ready data from package
