@@ -60,12 +60,12 @@ NCRMP_colony_percent_cover <- function(region, ptitle, file_path, project = "NUL
               "PRICO" = NCRMP_PRICO_2014_23_percent_cover_species,
               "STTSTJ" = NCRMP_STTSTJ_2013_23_percent_cover_species,
               "STX" = NCRMP_STX_2015_23_percent_cover_species,
-              "FGB" = NCRMP_FGBNMS_2013_22_percent_cover_species,
+              "FGB" = NCRMP_FGBNMS_2013_24_percent_cover_species,
               stop("Unknown region"))
 
 
   #get weighted data
-  weighted_data <- NCRMP_make_weighted_species_coral_cover_data(region = region, sppcvr = sppcvr_dataset, project = project)
+  weighted_data <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region, sppcvr = sppcvr_dataset, project = project)
 
   # unpack list
   list2env(weighted_data, envir = .GlobalEnv)

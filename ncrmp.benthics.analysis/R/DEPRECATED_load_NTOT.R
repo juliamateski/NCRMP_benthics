@@ -43,7 +43,7 @@
 #'
 #'
 
-load_NTOT_DEPRECIATED <- function(region, inputdata, project){
+load_NTOT_DEPRECATED <- function(region, inputdata, project){
 
 
 #### Read in ntot ####

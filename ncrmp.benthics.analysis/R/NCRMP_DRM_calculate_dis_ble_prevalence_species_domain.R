@@ -108,7 +108,6 @@ NCRMP_DRM_calculate_dis_ble_prevalence_species_domain <- function(project, regio
     dplyr::select(-Total_ble, -Total_dis, -Total_col, -DIS_PREV) %>%
     filter_corals()  # filter out spp columns
 
-
   dat_dis_wide <- dat %>%
     dplyr::select(-Total_ble, -Total_dis, -Total_col, -BLE_PREV) %>%
     filter_corals() # filter out spp columns

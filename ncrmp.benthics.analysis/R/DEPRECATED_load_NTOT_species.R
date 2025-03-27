@@ -46,7 +46,7 @@
 
 
 
-load_NTOT_species <- function(region, inputdata, project){
+load_NTOT_species_DEPRECATED <- function(region, inputdata, project){
 
 
   if(region == "FLK"){

@@ -51,7 +51,7 @@
 #'
 
 
-NCRMP_calculate_cover_DEPRECIATED <- function(region, project = "NULL"){
+NCRMP_calculate_cover_DEPRECATED <- function(region, project = "NULL"){
 
   dat <- load_NCRMP_benthic_cover_data(region = region, project = project)
   # make sure the lat/longs and prot are stored correctly

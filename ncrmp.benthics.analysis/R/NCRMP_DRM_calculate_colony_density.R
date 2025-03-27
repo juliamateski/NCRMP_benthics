@@ -115,6 +115,7 @@ NCRMP_DRM_calculate_colony_density <- function(project = "NULL", region, species
         dplyr::ungroup() %>%
         dplyr::mutate(PRIMARY_SAMPLE_UNIT = as.factor(PRIMARY_SAMPLE_UNIT))
 
+      
       density_species_2stage <- dat_2stage %>%
         clean_data() %>%
         dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, ADMIN, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, METERS_COMPLETED, SPECIES_CD, SPECIES_NAME) %>%

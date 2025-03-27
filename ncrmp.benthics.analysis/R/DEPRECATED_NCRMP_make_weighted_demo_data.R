@@ -61,7 +61,7 @@
 #'
 #'
 
-NCRMP_make_weighted_demo_data_DEPRECIATED <- function(project, inputdata, region, datatype, species_filter){
+NCRMP_make_weighted_demo_data_DEPRECATED <- function(project, inputdata, region, datatype, species_filter){
 
   # Define regional groups
   FL <- c("SEFCRI", "FLK", "Tortugas")

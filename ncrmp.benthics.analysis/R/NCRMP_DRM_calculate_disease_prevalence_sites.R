@@ -61,6 +61,7 @@ NCRMP_DRM_calculate_disease_prevalence_sites <- function(project, region, specie
                     LON_DEGREES = sprintf("%0.4f", LON_DEGREES))
   }
 
+  
   ####Helper Function: process data ####
   process_data <- function(data){
     data %>%

@@ -48,9 +48,6 @@
 #'
 #'
 #'
-#'
-#'
-#'
 #' @param project A string indicating the project, "NCRMP" or NCRMP and DRM combined ("NCRMP_DRM").
 #' @param inputdata A dataframe A dataframe of coral demographic data. Can be in various forms.
 #' @param region A string indicating the region.  Options are: "SEFCRI", "FLK", "Tortugas", "STX", "STTSTJ", "PRICO", and "FGB".
@@ -654,8 +651,6 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
           calc_size()
     }
 
-    print("j")
-
 
       if(region %in% FL && project == "NCRMP_DRM"){
         # Calculate av, svar, n and std
@@ -677,7 +672,6 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
                         n_sites = tidyr::replace_na(n_sites, 0))  %>%
           dplyr::ungroup()
       }
-    print("u")
 
     if(region %in% FGB | region %in% Carib) {
 
@@ -688,7 +682,6 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         calc_size()
     }
 
-    print("l")
 
     # Reformat output
     if(project == "NCRMP"){
@@ -723,7 +716,6 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
         dplyr::ungroup()
     }
 
-   print("i")
     if(project == "NCRMP_DRM"){
 
       size_est <- size_est %>%
@@ -746,7 +738,6 @@ NCRMP_make_weighted_demo_data <- function(project, inputdata, region, datatype, 
 
     # Create list to export
     if(project == "NCRMP"){
-      print(2)
       output <- list(
         "size_est_cm2_strata" = size_est_cm2_strata,
         'size_est_cm3_strata' = size_est_cm3_strata,

@@ -52,31 +52,14 @@
 #'
 
 
-region = "FGB"
-project = "NCRMP"
-sppdens = NCRMP_FGBNMS_2013_24_density_species
 # function to Calculate weights based on the most recent sampling grid
 NCRMP_make_weighted_density_CV_data <- function(region, sppdens, project = "NULL") {
 
   ####Load NTOT####
   ntot <- load_NTOT(region = region, inputdata = sppdens, project = project)
 
-  ################UPDATE ALLOCATION SPECIES################################
-  ## Define allocation species for each region
-  allocation_species_list <- list(
-    STTSTJ = c("Colpophyllia natans", "Diploria labyrinthiformis", "Madracis decactis", "Meandrina meandrites", "Montastraea cavernosa", "Orbicella annularis", "Orbicella faveolata", "Pseudodiploria strigosa", "Siderastrea siderea"),
-    STX = c("Colpophyllia natans", "Dichocoenia stokesii", "Madracis decactis", "Montastraea cavernosa", "Orbicella annularis", "Orbicella franksi", "Pseudodiploria strigosa"),
-    PRICO = c("Colpophyllia natans", "Diploria labyrinthiformis", "Madracis decactis", "Meandrina meandrites", "Montastraea cavernosa", "Orbicella annularis", "Orbicella faveolata", "Orbicella franksi", "Pseudodiploria strigosa"),
-    FLK = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Siderastrea siderea", "Solenastrea bournoni"),
-    Tortugas = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Orbicella franksi", "Stephanocoenia intersepta"),
-    SEFCRI = c("Acropora cervicornis", "Dichocoenia stokesii", "Montastraea cavernosa", "Porites astreoides", "Pseudodiploria strigosa", "Siderastrea siderea")
-    FGB =  c("Montastraea cavernosa", "Orbicella faveolata", "Orbicella franksi", "Siderastrea siderea", "Stephanocoenia intersepta", "Porites porites", "Agaricia agaricites", "Colpophyllia natans", "Mussa angulosa", "Agaricia fragilis", "Madracis auretenra", "Pseudodiploria strigosa",
-                          "Orbicella annularis", "Agaricia humilis", "Scolymia cubensis", "Agaricia lamarcki", "Tubastraea coccinea", "Madracis decactis", "Porites astreoides"))
-  )
-
-  # Get the list of allocation species for the given region
-  coral_species <- allocation_species_list[[region]]
-
+  #### Call Function to get Species ####
+  coral_species <-  species_for_CV_and_occurrence(region)
 
   ####coral data processing####
   species_dens_wide <- sppdens %>%

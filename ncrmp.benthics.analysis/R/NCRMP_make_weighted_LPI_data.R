@@ -49,63 +49,74 @@
 #' @importFrom magrittr "%>%"
 #' @export
 #'
+#'
+#'
 NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
-
-  ####Prep Data####
+  
+  # Define regional groups
   FL <- c("SEFCRI", "FLK", "Tortugas")
-  FGB <- "FGB"
+  GOM <- "GOM"
   Carib <- c("STTSTJ", "STX", "PRICO")
-
+  
+  #####Load NTOT data####
   ntot <- load_NTOT(region = region, inputdata = inputdata, project = project)
-
-  ####Calculating cover estimates####
-  calculate_cover_estimates <- function(data, group_vars, extra_mutate = list()) {
-    data %>%
-      dplyr::group_by(!!!syms(group_vars)) %>%
+  
+  #####processing cover data (used by both FL and non-FL regions)####
+  process_cover_data <- function(data, region_is_FL = TRUE) {
+    # Group data by YEAR, ANALYSIS_STRATUM, STRAT, PROT (if FL) or cover_group
+    cover_est <- data %>%
+      dplyr::group_by(YEAR, ANALYSIS_STRATUM, STRAT, cover_group) %>%
       dplyr::summarise(
-        avcvr = mean(Percent_Cvr),
-        svar = var(Percent_Cvr),
+        avcvr = mean(Percent_Cvr, na.rm = TRUE),
+        svar = var(Percent_Cvr, na.rm = TRUE),
         n = length(unique(PRIMARY_SAMPLE_UNIT)),
         MIN_DEPTH = mean(MIN_DEPTH, na.rm = TRUE),
         MAX_DEPTH = mean(MAX_DEPTH, na.rm = TRUE),
         DEPTH_M = (MIN_DEPTH + MAX_DEPTH) / 2
       ) %>%
+      # Handle 0 variance values
       dplyr::mutate(
-        svar = ifelse(svar == 0, 1e-8, svar),
+        svar = ifelse(svar == 0, 0.00000001, svar),
         Var = svar / n,
         std = sqrt(svar),
         SE = sqrt(Var),
-        CV_perc = (SE / avcvr) * 100,
-        !!!extra_mutate
+        CV_perc = (SE / avcvr) * 100
       )
-  }
-
-  group_vars <- if (region %in% FL) {
-    c("YEAR", "ANALYSIS_STRATUM", "STRAT", "PROT", "cover_group")
-  } else {
-    c("YEAR", "ANALYSIS_STRATUM", "STRAT", "cover_group")
+    
+    # Merge with NTOT data
+    cover_est <- cover_est %>%
+      dplyr::full_join(ntot) %>%
+      # Calculate weighted estimates and handle missing values
+      dplyr::mutate(
+        whavcvr = wh * avcvr,
+        whsvar = wh^2 * Var,
+        n = tidyr::replace_na(n, 0),
+        PROT = ifelse(region_is_FL, PROT, NA)  # Set PROT to NA for non-FL regions
+      ) %>%
+      dplyr::filter(cover_group != "NA")
+    
+    return(cover_est)
   }
   
-  ####Cover Estimate####
-  cover_est <- calculate_cover_estimates(inputdata, group_vars, list(PROT = ifelse(region %in% FL, NA, NULL)))
-
-  cover_est <- cover_est %>%
-    dplyr::full_join(ntot) %>%
-    dplyr::mutate(
-      whavcvr = wh * avcvr,
-      whsvar = wh^2 * Var,
-      n = tidyr::replace_na(n, 0)
-    ) %>%
-    dplyr::filter(!is.na(cover_group))
-
-  ####Reformat output####
+  #####Process Cover Data (region dependent)####
+  
+  # Process cover data for FL regions
+  if (region %in% FL) {
+    cover_est <- process_cover_data(inputdata, region_is_FL = TRUE)
+  }
+  #Process cover data for GOM and Caribbean regions
+  else if (region %in% GOM | region %in% Carib) {
+    cover_est <- process_cover_data(inputdata, region_is_FL = FALSE)
+  }
+  
+  #####Create strata means####
   cover_strata <- cover_est %>%
     dplyr::select(REGION, YEAR, ANALYSIS_STRATUM, STRAT, PROT, DEPTH_M, cover_group, n, avcvr, Var, SE, CV_perc) %>%
-    dplyr::mutate(n = tidyr::replace_na(n, 0), CV_perc = ifelse(CV_perc == Inf, NA_real_, CV_perc))
-
-  ####Calculate Domain Est####
+    dplyr::mutate(n = tidyr::replace_na(n, 0)) %>%
+    dplyr::mutate(CV_perc = ifelse(CV_perc == Inf, NA_real_, CV_perc))
+  
+  ####Create domain estimates####
   Domain_est <- cover_est %>%
-    dplyr::mutate(CV_perc = ifelse(CV_perc == Inf, NA_real_, CV_perc)) %>%
     dplyr::group_by(REGION, YEAR, cover_group) %>%
     dplyr::summarise(
       avCvr = sum(whavcvr, na.rm = TRUE),
@@ -117,7 +128,12 @@ NCRMP_make_weighted_LPI_data <- function(inputdata, region, project = "NULL") {
       ngrtot = sum(NTOT)
     ) %>%
     dplyr::ungroup()
-
-  ####Export####
-  list("cover_strata" = cover_strata, "Domain_est" = Domain_est)
+  
+  #####Export results####
+  output <- list(
+    "cover_strata" = cover_strata,
+    "Domain_est" = Domain_est
+  )
+  
+  return(output)
 }

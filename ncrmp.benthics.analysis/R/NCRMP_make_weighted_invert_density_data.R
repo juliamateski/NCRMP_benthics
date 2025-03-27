@@ -69,7 +69,7 @@ NCRMP_make_weighted_invert_density_data <- function(inputdata, region, project =
 
 
   #### Density Calc Helper Function ####
-  density_calculator <- function(region){
+  density_calculator <- function(data){
     data <- data %>%
       dplyr::summarise(
         avden = mean(Diadema_dens), # calculate mean density
@@ -122,8 +122,6 @@ NCRMP_make_weighted_invert_density_data <- function(inputdata, region, project =
       stratum_estimates()
   }
 
-
-  #JULIA whats going on here
   # Reformat output
   dens_est <- dens_est %>%
     dplyr::select(REGION, YEAR, ANALYSIS_STRATUM, STRAT, PROT, NTOT, ngrtot, wh, n, avden, svar, std, whavden, whsvar, whstd)

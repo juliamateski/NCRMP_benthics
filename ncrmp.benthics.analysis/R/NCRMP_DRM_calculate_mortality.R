@@ -55,66 +55,213 @@
 #'
 #'
 
-NCRMP_DRM_calculate_mortality <- function(project, region, species_filter = "NULL") {
-  
-  #### Load Data ####
-  mortality_data <- load_NCRMP_DRM_demo_data(project = project, region = region, species_filter = species_filter)
-  list2env(mortality_data, envir = environment())
-  
-  #### Helper Functions ####
-  clean_mortality_data <- function(data) {
-    data %>%
-      dplyr::filter(N == 1,
-                    SUB_REGION_NAME != "Marquesas",
-                    SUB_REGION_NAME != "Marquesas-Tortugas Trans",
-                    OLD_MORT != "NA",
-                    OLD_MORT <= 100) %>%
-      dplyr::mutate(PROT = as.factor(PROT),
-                    PRIMARY_SAMPLE_UNIT = as.factor(PRIMARY_SAMPLE_UNIT))
-  }
-  
-  calculate_mean_mortality <- function(data, mortality_column, mortality_type) {
-    data %>%
-      dplyr::summarise(avg_site_mortality = mean({{mortality_column}}, na.rm = TRUE), .groups = "keep") %>%
-      dplyr::mutate(MORTALITY_TYPE = mortality_type) %>%
-      dplyr::ungroup()
-  }
-  
-  #### Calculate Old Mortality ####
-  if (project == "NCRMP_DRM" || (project == "NCRMP" && region %in% c("SEFCRI", "Tortugas"))) {
-    old_mortality_stage1 <- dat_1stage %>%
-      clean_mortality_data() %>%
-      dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
-      calculate_mean_mortality(mortality_column = OLD_MORT, mortality_type = "Old")
-    
-    old_mortality_stage2 <- dat_2stage %>%
-      clean_mortality_data() %>%
-      dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
-      dplyr::summarise(transect_mortality = mean(OLD_MORT), .groups = "keep") %>%
-      dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
-      calculate_mean_mortality(mortality_column = transect_mortality, mortality_type = "Old")
-    
-    old_mortality_site <- rbind(old_mortality_stage1, old_mortality_stage2)
-  } else {
-    old_mortality_site <- dat_1stage %>%
-      clean_mortality_data() %>%
-      dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
-      calculate_mean_mortality(mortality_column = OLD_MORT, mortality_type = "Old")
-  }
-  
-  #### Apply Weighting and Compute Regional Estimates ####
-  weighted_data <- NCRMP_make_weighted_demo_data(project, inputdata = old_mortality_site, region, datatype = "mortality")
-  list2env(weighted_data, envir = environment())
-  
-  old_mortality_strata <- mortality_strata %>% dplyr::mutate(MORTALITY_TYPE = "Old")
-  domain_estimate_old_mortality <- Domain_est %>% dplyr::mutate(MORTALITY_TYPE = "Old")
-  
-  #### Export Results ####
-  output <- list(
-    "old_mortality_site" = old_mortality_site,
-    "old_mortality_strata" = old_mortality_strata,
-    "domain_estimate_old_mortality" = domain_estimate_old_mortality
-  )
-  
-  return(output)
+NCRMP_DRM_calculate_mortality <- function(project, region, species_filter = "NULL"){
+
+      demo_data <- load_NCRMP_DRM_demo_data(project = project, region = region, species_filter = species_filter)
+      list2env(demo_data, envir = environment())
+
+          #### Helper Functions ####
+          #clean old mort dat
+          clean_old_mortality_data <- function(data) {
+            data %>%
+              dplyr::filter(N == 1,
+                            SUB_REGION_NAME != "Marquesas",
+                            SUB_REGION_NAME != "Marquesas-Tortugas Trans",
+                            OLD_MORT != "NA",
+                            OLD_MORT <= 100) %>%
+              dplyr::mutate(PROT = as.factor(PROT),
+                            PRIMARY_SAMPLE_UNIT = as.factor(PRIMARY_SAMPLE_UNIT))
+          }
+
+          #clean rec mort data
+          clean_rec_mortality_data <- function(data) {
+            data %>%
+              dplyr::filter(N == 1,
+                            SUB_REGION_NAME != "Marquesas",
+                            SUB_REGION_NAME != "Marquesas-Tortugas Trans",
+                            RECENT_MORT != "NA",
+                            RECENT_MORT <= 100) %>%
+              dplyr::mutate(PROT = as.factor(PROT),
+                            PRIMARY_SAMPLE_UNIT = as.factor(PRIMARY_SAMPLE_UNIT))
+
+          }
+        
+        #calculate avsitemort 
+        fun1 <- function(data, column, mort_type){
+          data %>%
+            dplyr::summarise(avsitemort = mean({{ column }}), .groups = "keep") %>%
+            dplyr::mutate(MORT_TYPE = mort_type) %>%
+            dplyr::ungroup()
+          
+        }
+          
+  ####Calculate mean Old mortality####
+
+      if (project == "NCRMP_DRM" || (project == "NCRMP" && (region == "SEFCRI" || region == "Tortugas"))) {
+            dat1_1stage <- dat_1stage %>%
+              clean_old_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
+              fun1(OLD_MORT, "Old")
+            
+            dat1_2stage <- dat_2stage %>%
+              clean_old_mortality_data() %>%
+              # when data is two stage (two transects or more) calculate transect mean before site mean.
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
+              dplyr::summarise(transect_mort = mean(OLD_MORT), .groups = "keep") %>%
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
+              fun1(transect_mort, "Old")
+            
+            old_mortality_site <- rbind(dat1_1stage, dat1_2stage)
+
+          } else {
+
+            old_mortality_site <- dat_1stage %>%
+              clean_old_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(OLD_MORT, "Old")
+          }
+
+          # Apply weighting scheme and calculate strata and regional means
+          weighted_demo  <- NCRMP_make_weighted_demo_data(project, inputdata = old_mortality_site, region, datatype = "mortality")
+          # unpack list
+          list2env(weighted_demo, envir = environment())
+
+          #mutate mort type
+          old_mortality_strata <- mortality_strata %>% dplyr::mutate(MORT_TYPE = "Old")
+          Domain_est_old_mort <- Domain_est %>% dplyr::mutate(MORT_TYPE = "Old")
+
+
+          ####Calculate mean Recent mortality####
+          if (project == "NCRMP_DRM" || (project == "NCRMP" && (region == "SEFCRI" || region == "Tortugas"))) {
+            
+            dat1_1stage <- dat_1stage %>%
+              clean_rec_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(RECENT_MORT, "Recent") 
+
+            dat1_2stage <- dat_2stage %>%
+              clean_rec_mortality_data() %>%
+              # when data is two stage (two transects or more) calculate transect mean before site mean.
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>% #No need to include region, will be added from ntot in wh. function
+              dplyr::summarise(transect_mort = mean(RECENT_MORT)) %>%
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>%
+              fun1(transect_mort, "Recent") 
+
+            recent_mortality_site <- rbind(dat1_1stage, dat1_2stage)
+
+          } else {
+            recent_mortality_site <- dat_1stage %>%
+              clean_rec_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(RECENT_MORT, "Recent") 
+          }
+
+          # Apply weighting scheme and calculate strata and regional means
+          weighted_data  <- NCRMP_make_weighted_demo_data(project, inputdata = recent_mortality_site, region, datatype = "mortality")
+          # unpack list
+          list2env(weighted_data, envir = environment())
+
+          rec_mortality_strata <- mortality_strata %>% dplyr::mutate(MORT_TYPE = "Recent")
+          Domain_est_rec_mort <- Domain_est %>% dplyr::mutate(MORT_TYPE = "Recent")
+          
+          
+          # Old mortality for each species
+          if (project == "NCRMP_DRM" || (project == "NCRMP" && (region == "SEFCRI" || region == "Tortugas"))) {
+
+            dat1_1stage <- dat_1stage %>%
+              clean_old_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>%
+              fun1(OLD_MORT, "Old") 
+
+
+            dat1_2stage <- dat_2stage %>%
+              clean_old_mortality_data() %>%
+              # when data is two stage (two transects or more) calculate transect mean before site mean.
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>%
+              dplyr::summarise(transect_mort = mean(OLD_MORT), .groups = "keep") %>%
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>%
+              fun1(transect_mort, "Old") 
+
+            old_mortality_species_site <- rbind(dat1_1stage, dat1_2stage)
+
+          } else {
+
+            old_mortality_species_site <- dat_1stage %>%
+              clean_old_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(REGION, SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(OLD_MORT, "Old") 
+          }
+
+          # Apply weighting scheme and calculate strata and regional means
+
+          weighted_data  <- NCRMP_make_weighted_demo_data(project, inputdata = old_mortality_species_site, region, datatype = "mortality_species")
+
+          # unpack list
+          list2env(weighted_data, envir = environment())
+
+          old_mortality_species_strata <- mortality_strata_species %>% dplyr::mutate(MORT_TYPE = "Old")
+          Domain_est_old_mort_species <- Domain_est_species %>% dplyr::mutate(MORT_TYPE = "Old")
+          ntot_check_old_mort_species <- ntot_check
+
+          # Recent mortality by species
+
+          if (project == "NCRMP_DRM" || (project == "NCRMP" && (region == "SEFCRI" || region == "Tortugas"))) {
+
+            dat1_1stage <- dat_1stage %>%
+              clean_rec_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(RECENT_MORT, "Recent") 
+
+
+            dat1_2stage <- dat_2stage %>%
+              clean_rec_mortality_data() %>%
+              # when data is two stage (two transects or more) calculate transect mean before site mean.
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, STATION_NR, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>% #No need to include region, will be added from ntot in wh. function
+              dplyr::summarise(transect_mort = mean(RECENT_MORT)) %>%
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>%
+              fun1(transect_mort, "Recent") 
+          
+            recent_mortality_species_site <- rbind(dat1_1stage, dat1_2stage)
+
+          } else {
+
+            recent_mortality_species_site <- dat_1stage %>%
+              clean_rec_mortality_data() %>%
+              # calculate site level mortality
+              dplyr::group_by(SURVEY, YEAR, SUB_REGION_NAME, PRIMARY_SAMPLE_UNIT, LAT_DEGREES, LON_DEGREES, STRAT, HABITAT_CD, PROT, SPECIES_CD, SPECIES_NAME) %>% #No need to include region, will be added from ntot in wh. function
+              fun1(RECENT_MORT, "Recent") 
+          }
+
+          # Apply weighting scheme and calculate strata and regional means
+          weighted_data  <- NCRMP_make_weighted_demo_data(project, inputdata = recent_mortality_species_site, region, datatype = "mortality_species")
+          # unpack list
+          list2env(weighted_data, envir = environment())
+
+          rec_mortality_species_strata <- mortality_strata_species %>% dplyr::mutate(MORT_TYPE = "Recent")
+          Domain_est_rec_mort_species <- Domain_est_species %>%dplyr::mutate(MORT_TYPE = "Recent")
+          ntot_check_rec_mort_species <- ntot_check
+
+          ####Export####
+          output <- list(
+            "old_mortality_site" = old_mortality_site,
+            "recent_mortality_site" = recent_mortality_site,
+            "old_mortality_strata" =old_mortality_strata,
+            "rec_mortality_strata" = rec_mortality_strata,
+            "old_mortality_species_strata" = old_mortality_species_strata,
+            "rec_mortality_species_strata" = rec_mortality_species_strata,
+            "Domain_est_old_mort" = Domain_est_old_mort,
+            "Domain_est_rec_mort" = Domain_est_rec_mort,
+            "Domain_est_old_mort_species" = Domain_est_old_mort_species,
+            "Domain_est_rec_mort_species" = Domain_est_rec_mort_species,
+            "ntot_check_rec_mort_species" = ntot_check_rec_mort_species,
+            "ntot_check_old_mort_species" = ntot_check_old_mort_species)
+
+          return(output)
 }

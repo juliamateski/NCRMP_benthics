@@ -52,7 +52,7 @@
 #'
 
 
-NCRMP_DRM_calculate_disease_prevalence_colonies_depreciated <- function(project, region, species_filter = "NULL"){
+NCRMP_DRM_calculate_disease_prevalence_colonies_DEPRECATED <- function(project, region, species_filter = "NULL"){
 
 
   # Load data

@@ -57,18 +57,8 @@
 
 NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, file_path = "NULL", species_filter = "NULL", project = "NULL"){
 
-  #### coral species used in allocation, updated for USVI/PR 2023 ####
-
-    coral_species_by_region <- switch(region,
-      "STTSTJ" = c("Colpophyllia natans", "Diploria labyrinthiformis", "Madracis decactis", "Meandrina meandrites", "Montastraea cavernosa", "Orbicella annularis", "Orbicella faveolata", "Pseudodiploria strigosa", "Siderastrea siderea"),
-      "STX" = c("Colpophyllia natans", "Dichocoenia stokesii", "Madracis decactis", "Montastraea cavernosa", "Orbicella annularis", "Orbicella franksi", "Pseudodiploria strigosa"),
-      "PRICO" = c("Colpophyllia natans", "Diploria labyrinthiformis", "Madracis decactis", "Meandrina meandrites", "Montastraea cavernosa", "Orbicella annularis", "Orbicella faveolata", "Orbicella franksi", "Pseudodiploria strigosa"),
-      "FLK" = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Siderastrea siderea", "Solenastrea bournoni"),
-      "Tortugas" = c("Colpophyllia natans", "Montastraea cavernosa", "Orbicella faveolata", "Porites astreoides", "Orbicella franksi", "Stephanocoenia intersepta"),
-      "SEFCRI" = c("Acropora cervicornis", "Dichocoenia stokesii", "Montastraea cavernosa", "Porites astreoides", "Pseudodiploria strigosa", "Siderastrea siderea"),
-      "FGB" = c("Montastraea cavernosa", "Orbicella faveolata", "Orbicella franksi", "Siderastrea siderea", "Stephanocoenia intersepta", "Porites porites", "Agaricia agaricites", "Colpophyllia natans", "Mussa angulosa", "Agaricia fragilis", "Madracis auretenra", "Pseudodiploria strigosa",
-                "Orbicella annularis", "Agaricia humilis", "Scolymia cubensis", "Agaricia lamarcki", "Tubastraea coccinea", "Madracis decactis", "Porites astreoides"))
-
+  #### Call Function to get Species ####
+    coral_species_by_region <- species_for_CV_and_occurrence(region)
 
   ####Get dataset for sppdens####
   #based on region and project
@@ -224,7 +214,6 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
   region_means_cv20 <- region_means %>%
     dplyr::filter(CV <= .20)
 
-
   #### Export ####
 
   # Create list to export
@@ -235,7 +224,3 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
   return(output)
 
 }
-
-
-
-

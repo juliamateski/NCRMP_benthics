@@ -53,7 +53,7 @@
 #'
 
 
-NCRMP_DRM_calculate_mean_colony_size_DEPRECIATED <- function(project = "NULL", region, species_filter = "NULL"){
+NCRMP_DRM_calculate_mean_colony_size_DEPRECATED <- function(project = "NULL", region, species_filter = "NULL"){
 
   tmp <- load_NCRMP_DRM_demo_data(project = project,
                                   region = region,
@@ -244,7 +244,7 @@ NCRMP_DRM_calculate_mean_colony_size_DEPRECIATED <- function(project = "NULL", r
 
 
   # Run through the weighting function
-  tmp  <- NCRMP_make_weighted_demo_data(project,
+  tmp  <- NCRMP_make_weighted_demo_data_DEPRECATED(project,
                                         inputdata = size_site,
                                         region,
                                         datatype = "size",
@@ -258,7 +258,7 @@ NCRMP_DRM_calculate_mean_colony_size_DEPRECIATED <- function(project = "NULL", r
 
 
   # Run through the weighting function by species
-  tmp2  <- NCRMP_make_weighted_demo_data(project,
+  tmp2  <- NCRMP_make_weighted_demo_data_DEPRECATED(project,
                                          inputdata = size_species,
                                          region,
                                          datatype = "size_species",

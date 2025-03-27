@@ -45,7 +45,7 @@
 #'
 
 
-NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, project = "NULL"){
+NCRMP_colony_percent_cover_DEPRECATED <- function(region, ptitle, file_path, project = "NULL"){
 
   #############
   # coral species used in allocation
@@ -54,7 +54,7 @@ NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, pr
 
   if(region == "SEFCRI"){
 
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = NCRMP_SEFCRI_2014_22_percent_cover_species,
                                                         project = project)
   }
@@ -63,14 +63,14 @@ NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, pr
 
     if(project == "NCRMP" || project == "NULL") {
 
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = NCRMP_FLK_2014_22_percent_cover_species,
                                                         project = project)
   }
 
   if(project == "MIR"){
 
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = MIR_2022_percent_cover_species_DUMMY,
                                                         project = "MIR")
 
@@ -80,7 +80,7 @@ NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, pr
 
   if(region == "Tortugas"){
 
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = NCRMP_Tort_2014_22_percent_cover_species,
                                                         project = project)
   }
@@ -91,7 +91,7 @@ NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, pr
 
     # Puerto Rico
 
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = NCRMP_PRICO_2014_23_percent_cover_species,
                                                         project = project)
 
@@ -100,7 +100,7 @@ NCRMP_colony_percent_cover_DEPRECIATED <- function(region, ptitle, file_path, pr
   if(region=="STTSTJ") {
 
     # STT-STJ
-    tmp <- NCRMP_make_weighted_species_coral_cover_data(region = region,
+    tmp <- NCRMP_make_weighted_species_coral_cover_data_DEPRECATED(region = region,
                                                         sppcvr = NCRMP_STTSTJ_2013_23_percent_cover_species,
                                                         project = project)
 
