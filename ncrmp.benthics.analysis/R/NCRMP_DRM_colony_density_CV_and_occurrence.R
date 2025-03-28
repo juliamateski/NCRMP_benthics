@@ -60,7 +60,7 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
   #### Call Function to get Species ####
     coral_species_by_region <- species_for_CV_and_occurrence(region)
 
-  ####Get dataset for sppdens####
+    ####Get dataset for sppdens####
   #based on region and project
   sppdens <- switch(region,
                     "FLK" = switch(project,
@@ -99,12 +99,12 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
         dplyr::filter(occurrence > set_occurrence) %>%
         dplyr::filter(CV < 1) %>%
         ggplot(aes(x = 1, y = reorder(SPECIES_CD, occurrence))) +
-        geom_text(aes(label = SPECIES_CD, 
-                      fontface = ifelse(SPECIES_CD %in% c("Acropora cervicornis", "Acropora palmata", 
-                                                          "Dendrogyra cylindrus", "Orbicella annularis", 
-                                                          "Orbicella faveolata", "Orbicella franksi", 
-                                                          "Mycetophyllia ferox"), 
-                                        "bold.italic", "italic")), size = 3) + 
+        geom_text(aes(label = SPECIES_CD,
+                      fontface = ifelse(SPECIES_CD %in% c("Acropora cervicornis", "Acropora palmata",
+                                                          "Dendrogyra cylindrus", "Orbicella annularis",
+                                                          "Orbicella faveolata", "Orbicella franksi",
+                                                          "Mycetophyllia ferox"),
+                                        "bold.italic", "italic")), size = 3) +
         geom_segment(aes(x = 0.94, xend = 0.96, yend = SPECIES_CD)) +
         geom_segment(aes(x = 1.04, xend = 1.065, yend = SPECIES_CD)) +
         ggtitle(ptitle) +
@@ -119,7 +119,7 @@ NCRMP_DRM_colony_density_CV_and_occurrence <- function(region, ptitle, year, fil
               axis.ticks.x = element_line(color = NA),
               plot.margin = unit(c(t = 1, r = -1, b = 1, l = -1), "mm"),
               plot.title = element_text(hjust = 0.5))
-      
+
 
     g1 <-  region_means %>%
       # filter to year of interest

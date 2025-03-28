@@ -69,7 +69,6 @@
 
 NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, length_bin_count = 10, species_filter = NULL) {
 
-  
   ####Load Data###
   analyzed_species <-  species_filter
 
@@ -88,7 +87,7 @@ NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, l
   }
 
   ####Prep Florida Region Data###3
-  
+
   if(project == "NCRMP_DRM" | region %in% c("SEFCRI", "Tortugas")){
 
     # with 2 stage data (NCRMP+DRM and SEFCRI 2014, Tortugas 2018 and 2020)
@@ -413,7 +412,7 @@ NCRMP_make_size_bins <- function(region , project, years, size_bin_count = 10, l
 
   }
 
-  
+
   length_estimates_wh <- length_estimates  %>%
     # Merge ntot with coral_est_spp
     dplyr::full_join(ntot) %>%

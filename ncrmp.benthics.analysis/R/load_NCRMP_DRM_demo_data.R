@@ -43,8 +43,11 @@
 #' @export
 #'
 #'
+#'
+#'
 load_NCRMP_DRM_demo_data <- function(project = "NULL", region, species_filter = "NULL"){
-
+region = "SEFCRI"
+project = "NCRMP"
   #### clean data function ####
   clean_data <- function(data, survey){
     data<- data %>%
